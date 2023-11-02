@@ -1,7 +1,9 @@
 package basecamp
 
 import (
+	"errors"
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -16,5 +18,30 @@ func TestGetProjects(t *testing.T) {
 
 	for i, project := range projects {
 		fmt.Printf("project[%d] name: %s\n", i, project.Name)
+	}
+}
+
+func TestGetProjectByName_notFound(t *testing.T) {
+	_, err := GetProjectByName("test123")
+	if !errors.Is(err, ErrNotFoundProject) {
+		t.Errorf("Expected error %q, got %q instead", ErrNotFoundProject, err)
+	}
+}
+
+func TestGetProjectByName(t *testing.T) {
+	projects, err := GetProjects()
+	if err != nil {
+		t.Error(err)
+	}
+
+	size := len(projects)
+	p1 := projects[rand.Intn(size)]
+	p2, err := GetProjectByName(p1.Name)
+	fmt.Println("project name:", p1.Name)
+	if err != nil {
+		t.Error(err)
+	}
+	if p1.Name != p2.Name {
+		t.Errorf("%q and %q should be the same", p1.Name, p2.Name)
 	}
 }

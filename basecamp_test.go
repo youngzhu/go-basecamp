@@ -1,6 +1,9 @@
 package basecamp
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestAccount(t *testing.T) {
 	if a.accountID == "" {
@@ -12,4 +15,11 @@ func TestAccount(t *testing.T) {
 
 	//println("accountID:", a.accountID)
 	//println("accessToken:", a.accessToken)
+}
+
+func TestAddScheduleEntry_noProject(t *testing.T) {
+	err := AddScheduleEntry("nonproj")
+	if !errors.Is(err, ErrNotFoundProject) {
+		t.Errorf("Expected error %q, got %q instead", ErrNotFoundProject, err)
+	}
 }

@@ -1,6 +1,7 @@
 package basecamp
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 	"strings"
 )
@@ -30,4 +31,15 @@ func parseUrl(url string, ids ...string) string {
 	url = strings.Replace(url, "$ACCOUNT_ID", a.accountID, 1)
 
 	return url
+}
+
+func AddScheduleEntry(projectName string) error {
+	project, err := GetProjectByName(projectName)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("project ID:", project.Id)
+
+	return nil
 }
