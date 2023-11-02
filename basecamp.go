@@ -1,6 +1,9 @@
 package basecamp
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+	"strings"
+)
 
 var a account
 
@@ -17,4 +20,14 @@ func init() {
 		accountID:   viper.GetString("ACCOUNT_ID"),
 		accessToken: viper.GetString("ACCESS_TOKEN"),
 	}
+}
+
+const (
+	UrlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
+)
+
+func parseUrl(url string, ids ...string) string {
+	url = strings.Replace(url, "$ACCOUNT_ID", a.accountID, 1)
+
+	return url
 }
