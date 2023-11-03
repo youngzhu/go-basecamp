@@ -1,7 +1,6 @@
 package basecamp
 
 import (
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -31,14 +30,14 @@ func doRequest(url, method string, body io.Reader) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		msg, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("cannot read body: %w", err)
-		}
-		return nil, fmt.Errorf("%w: %s, %s",
-			err, http.StatusText(resp.StatusCode), msg)
-	}
+	//if resp.StatusCode != http.StatusOK {
+	//	msg, err := ioutil.ReadAll(resp.Body)
+	//	if err != nil {
+	//		return nil, fmt.Errorf("cannot read body: %w", err)
+	//	}
+	//	return nil, fmt.Errorf("%w: %s, %s",
+	//		err, http.StatusText(resp.StatusCode), msg)
+	//}
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

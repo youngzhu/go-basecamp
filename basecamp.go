@@ -1,9 +1,11 @@
 package basecamp
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/spf13/viper"
+	"github.com/youngzhu/go-basecamp/schedule"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -62,13 +64,11 @@ var (
 // AddScheduleEntry adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
-func AddScheduleEntry(projectName, scheduleName string) error {
+func AddScheduleEntry(projectName, scheduleName string, scheduleEntry schedule.Entry) error {
 	project, err := GetProjectByName(projectName)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("project ID:", project.Id)
 
 	var scheduleId int
 	for _, dock := range project.Dock {
@@ -80,9 +80,10 @@ func AddScheduleEntry(projectName, scheduleName string) error {
 		return fmt.Errorf("%w: %s", ErrNotFoundSchedule, scheduleName)
 	}
 
+	entryJson, _ := json.Marshal(scheduleEntry)
+
 	url := parseUrl(UrlScheduleEntry, project.Id, scheduleId)
-	_, err = doRequest(url, http.MethodPost,
-		strings.NewReader(`{"summary":"Important Meeting","starts_at":"2023-11-04T00:00:00Z","ends_at":"2023-11-04T00:00:00Z"}`))
+	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
 }
