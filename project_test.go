@@ -29,13 +29,8 @@ func TestGetProjectByName_notFound(t *testing.T) {
 }
 
 func TestGetProjectByName(t *testing.T) {
-	projects, err := GetProjects()
-	if err != nil {
-		t.Error(err)
-	}
+	p1 := getRandProject()
 
-	size := len(projects)
-	p1 := projects[rand.Intn(size)]
 	p2, err := GetProjectByName(p1.Name)
 	fmt.Println("project name:", p1.Name)
 	if err != nil {
@@ -44,4 +39,11 @@ func TestGetProjectByName(t *testing.T) {
 	if p1.Name != p2.Name {
 		t.Errorf("%q and %q should be the same", p1.Name, p2.Name)
 	}
+}
+
+func getRandProject() *Project {
+	projects, _ := GetProjects()
+
+	size := len(projects)
+	return &projects[rand.Intn(size)]
 }

@@ -2,7 +2,6 @@ package basecamp
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -45,8 +44,6 @@ func GetProjects() ([]Project, error) {
 	}
 	return projects, nil
 }
-
-var ErrNotFoundProject = errors.New("not found the project")
 
 func GetProjectByName(name string) (*Project, error) {
 	projects, err := GetProjects()
