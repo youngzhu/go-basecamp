@@ -2,7 +2,6 @@ package basecamp
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"github.com/youngzhu/go-basecamp/schedule"
@@ -11,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 )
+
+// API: https://github.com/basecamp/bc3-api
 
 var a account
 
@@ -28,11 +29,6 @@ func init() {
 		accessToken: viper.GetString("ACCESS_TOKEN"),
 	}
 }
-
-const (
-	UrlProjects      = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
-	UrlScheduleEntry = "https://3.basecampapi.com/$ACCOUNT_ID/buckets/$1/schedules/$3/entries.json"
-)
 
 func parseUrl(appUrl string, ids ...int) string {
 	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", a.accountID, 1)
@@ -56,11 +52,6 @@ func parseUrl(appUrl string, ids ...int) string {
 	return u.String()
 }
 
-var (
-	ErrNotFoundProject  = errors.New("not found the project")
-	ErrNotFoundSchedule = errors.New("not found the schedule")
-)
-
 // AddScheduleEntry adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
@@ -83,6 +74,33 @@ func AddScheduleEntry(projectName, scheduleName string, scheduleEntry schedule.E
 	entryJson, _ := json.Marshal(scheduleEntry)
 
 	url := parseUrl(UrlScheduleEntry, project.Id, scheduleId)
+	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
+
+	return err
+}
+
+// CreateCard creates a card
+// POST /buckets/1/card_tables/lists/2/cards.json
+// creates a card within the column with ID 2 in the project with id 1.
+func CreateCard(projectName, cardTableName, columnName string, card Card) error {
+	project, err := GetProjectByName(projectName)
+	if err != nil {
+		return err
+	}
+
+	var cardTableId int
+	for _, dock := range project.Dock {
+		if cardTableName == dock.Title {
+			cardTableId = dock.Id
+		}
+	}
+	if cardTableId == 0 {
+		return fmt.Errorf("%w: %s", ErrNotFoundCardTable, cardTableName)
+	}
+
+	entryJson, _ := json.Marshal(card)
+
+	url := parseUrl(UrlScheduleEntry, project.Id, cardTableId)
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err

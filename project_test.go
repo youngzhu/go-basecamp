@@ -41,6 +41,16 @@ func TestGetProjectByName(t *testing.T) {
 	}
 }
 
+func TestProject_getCardColumn(t *testing.T) {
+	project, _ := GetProjectByName("Profession")
+	columnName := "In progress"
+	cardColumn := project.getCardColumn("Card Table", columnName)
+	if cardColumn.Title != columnName {
+		t.Errorf("card column title not match, want: %s, but got: %s",
+			columnName, cardColumn.Title)
+	}
+}
+
 func getRandProject() *Project {
 	projects, _ := GetProjects()
 

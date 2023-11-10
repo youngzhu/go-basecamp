@@ -19,15 +19,17 @@ type Project struct {
 	BookmarkUrl    string    `json:"bookmark_url"`
 	Url            string    `json:"url"`
 	AppUrl         string    `json:"app_url"`
-	Dock           []struct {
-		Id       int    `json:"id"`
-		Title    string `json:"title"`
-		Name     string `json:"name"`
-		Enabled  bool   `json:"enabled"`
-		Position *int   `json:"position"`
-		Url      string `json:"url"`
-		AppUrl   string `json:"app_url"`
-	} `json:"dock"`
+	Dock           []dock    `json:"dock"`
+}
+
+type dock struct {
+	Id       int    `json:"id"`
+	Title    string `json:"title"`
+	Name     string `json:"name"`
+	Enabled  bool   `json:"enabled"`
+	Position *int   `json:"position"`
+	Url      string `json:"url"`
+	AppUrl   string `json:"app_url"`
 }
 
 func GetProjects() ([]Project, error) {
@@ -58,4 +60,13 @@ func GetProjectByName(name string) (*Project, error) {
 	}
 
 	return nil, fmt.Errorf("%w: %s", ErrNotFoundProject, name)
+}
+
+func (p *Project) getDock(dockName string) *dock {
+	for _, d := range p.Dock {
+		if dockName == d.Title {
+			return &d
+		}
+	}
+	return nil
 }

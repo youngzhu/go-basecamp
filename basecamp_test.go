@@ -2,7 +2,9 @@ package basecamp
 
 import (
 	"errors"
+	"fmt"
 	"github.com/youngzhu/go-basecamp/schedule"
+	"net/http"
 	"testing"
 	"time"
 )
@@ -61,6 +63,24 @@ func TestAddScheduleEntry(t *testing.T) {
 	}
 }
 
+//func TestGetCardTable(t *testing.T) {
+//	_, err := GetCardTable("Profession", "Card Table")
+//	if err != nil {
+//		t.Error(err)
+//	}
+//}
+
+func TestCreateCard(t *testing.T) {
+	card := Card{
+		Title: "test",
+	}
+
+	err := CreateCard("Profession", "Card Table", "", card)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestParseUrl(t *testing.T) {
 	testcases := []struct {
 		url    string
@@ -82,4 +102,13 @@ func TestParseUrl(t *testing.T) {
 		})
 	}
 
+}
+
+func TestDoRequest(t *testing.T) {
+	url := "https://3.basecampapi.com/5161745/buckets/28933112/card_tables/5878088123.json"
+	jsonResp, err := doRequest(url, http.MethodGet, nil)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Responese: %s", jsonResp)
 }
