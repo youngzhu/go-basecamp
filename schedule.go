@@ -1,8 +1,8 @@
-package schedule
+package basecamp
 
 import "time"
 
-type Entry struct {
+type ScheduleEntry struct {
 	// for create
 	Summary  string    `json:"summary"`
 	AllDay   bool      `json:"all_day"`
@@ -11,7 +11,7 @@ type Entry struct {
 }
 
 /*
-type Entry struct {
+type ScheduleEntry struct {
 	// when create
 	Summary  string    `json:"summary"`
 	AllDay   bool      `json:"all_day"`

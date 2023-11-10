@@ -3,7 +3,6 @@ package basecamp
 import (
 	"errors"
 	"fmt"
-	"github.com/youngzhu/go-basecamp/schedule"
 	"github.com/youngzhu/godate"
 	"net/http"
 	"testing"
@@ -23,7 +22,7 @@ func TestAccount(t *testing.T) {
 }
 
 func TestAddScheduleEntry_noProject(t *testing.T) {
-	err := AddScheduleEntry("nonproj", "", schedule.Entry{})
+	err := AddScheduleEntry("nonproj", "", ScheduleEntry{})
 	if !errors.Is(err, ErrNotFoundProject) {
 		t.Errorf("Expected error %q, got %q instead", ErrNotFoundProject, err)
 	}
@@ -31,14 +30,14 @@ func TestAddScheduleEntry_noProject(t *testing.T) {
 
 func TestAddScheduleEntry_noSchedule(t *testing.T) {
 	proj := getRandProject()
-	err := AddScheduleEntry(proj.Name, "", schedule.Entry{})
+	err := AddScheduleEntry(proj.Name, "", ScheduleEntry{})
 	if !errors.Is(err, ErrNotFoundSchedule) {
 		t.Errorf("Expected error %q, got %q instead", ErrNotFoundSchedule, err)
 	}
 }
 
 func TestAddScheduleEntry_allDay(t *testing.T) {
-	scheduleEntry := schedule.Entry{
+	scheduleEntry := ScheduleEntry{
 		Summary:  "开会一整天",
 		AllDay:   true,
 		StartsAt: time.Now(),
@@ -52,7 +51,7 @@ func TestAddScheduleEntry_allDay(t *testing.T) {
 }
 
 func TestAddScheduleEntry(t *testing.T) {
-	scheduleEntry := schedule.Entry{
+	scheduleEntry := ScheduleEntry{
 		Summary:  "Test",
 		StartsAt: time.Date(2023, 11, 5, 8, 0, 0, 0, time.Local),
 		EndsAt:   time.Date(2023, 11, 5, 10, 0, 0, 0, time.Local),

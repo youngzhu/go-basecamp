@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/viper"
-	"github.com/youngzhu/go-basecamp/schedule"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -30,50 +29,23 @@ func init() {
 	}
 }
 
-func parseUrl(appUrl string, ids ...int) string {
-	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", a.accountID, 1)
-
-	u, err := url.Parse(appUrl)
-	if err != nil {
-		panic(err)
-	}
-
-	arr := strings.Split(u.Path, "/")
-	var idx int
-	for i, s := range arr {
-		if strings.HasPrefix(s, "$") {
-			arr[i] = strconv.Itoa(ids[idx])
-			idx++
-		}
-	}
-
-	u.Path = strings.Join(arr, "/")
-
-	return u.String()
-}
-
 // AddScheduleEntry adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
-func AddScheduleEntry(projectName, scheduleName string, scheduleEntry schedule.Entry) error {
+func AddScheduleEntry(projectName, scheduleName string, scheduleEntry ScheduleEntry) error {
 	project, err := GetProjectByName(projectName)
 	if err != nil {
 		return err
 	}
 
-	var scheduleId int
-	for _, dock := range project.Dock {
-		if scheduleName == dock.Title {
-			scheduleId = dock.Id
-		}
-	}
-	if scheduleId == 0 {
+	schedule := project.getDock(scheduleName)
+	if schedule == nil {
 		return fmt.Errorf("%w: %s", ErrNotFoundSchedule, scheduleName)
 	}
 
 	entryJson, _ := json.Marshal(scheduleEntry)
 
-	url := parseUrl(UrlScheduleEntry, project.Id, scheduleId)
+	url := parseUrl(UrlScheduleEntry, project.Id, schedule.Id)
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
@@ -100,4 +72,26 @@ func CreateCard(projectName, cardTableName, columnName string, card Card) error 
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
+}
+
+func parseUrl(appUrl string, ids ...int) string {
+	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", a.accountID, 1)
+
+	u, err := url.Parse(appUrl)
+	if err != nil {
+		panic(err)
+	}
+
+	arr := strings.Split(u.Path, "/")
+	var idx int
+	for i, s := range arr {
+		if strings.HasPrefix(s, "$") {
+			arr[i] = strconv.Itoa(ids[idx])
+			idx++
+		}
+	}
+
+	u.Path = strings.Join(arr, "/")
+
+	return u.String()
 }
