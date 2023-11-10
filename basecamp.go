@@ -88,19 +88,15 @@ func CreateCard(projectName, cardTableName, columnName string, card Card) error 
 		return err
 	}
 
-	var cardTableId int
-	for _, dock := range project.Dock {
-		if cardTableName == dock.Title {
-			cardTableId = dock.Id
-		}
-	}
-	if cardTableId == 0 {
-		return fmt.Errorf("%w: %s", ErrNotFoundCardTable, cardTableName)
+	cardColumn := project.getCardColumn(cardTableName, columnName)
+	if cardColumn == nil {
+		return fmt.Errorf("%w: card table: %q, card column: %q",
+			ErrNotFoundCardColumn, cardTableName, columnName)
 	}
 
 	entryJson, _ := json.Marshal(card)
 
-	url := parseUrl(UrlScheduleEntry, project.Id, cardTableId)
+	url := parseUrl(UrlCard, project.Id, cardColumn.Id)
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err

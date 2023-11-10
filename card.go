@@ -79,7 +79,7 @@ type CardTable struct {
 }
 
 type CardColumn struct {
-	Id               int64     `json:"id"`
+	Id               int       `json:"id"`
 	Status           string    `json:"status"`
 	VisibleToClients bool      `json:"visible_to_clients"`
 	CreatedAt        time.Time `json:"created_at"`

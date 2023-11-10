@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/youngzhu/go-basecamp/schedule"
+	"github.com/youngzhu/godate"
 	"net/http"
 	"testing"
 	"time"
@@ -71,11 +72,16 @@ func TestAddScheduleEntry(t *testing.T) {
 //}
 
 func TestCreateCard(t *testing.T) {
+	today := godate.Today()
+	workdays := today.Workdays()
+	monday := workdays[0]
+	friday := workdays[4]
 	card := Card{
-		Title: "test",
+		Title: monday.String() + " ~ " + friday.String(),
+		DueOn: friday.String(),
 	}
 
-	err := CreateCard("Profession", "Card Table", "", card)
+	err := CreateCard("Profession", "Card Table", "In progress", card)
 	if err != nil {
 		t.Error(err)
 	}

@@ -18,3 +18,13 @@ func ExampleAddScheduleEntry() {
 	// Output:
 	//
 }
+
+func ExampleCreateCard() {
+	basecamp.CreateCard("Profession", "Card Table", "In progress",
+		basecamp.Card{
+			Title: "Launch a product",
+		})
+
+	// Output:
+	//
+}
