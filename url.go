@@ -1,10 +1,10 @@
 package basecamp
 
 const (
-	// get
+	// get urls
 	urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
 
-	// create
+	// create urls
 	urlScheduleEntry = "https://3.basecampapi.com/$ACCOUNT_ID/buckets/$1/schedules/$3/entries.json"
 	urlCard          = "https://3.basecampapi.com/$ACCOUNT_ID/buckets/$1/card_tables/lists/$2/cards.json"
 )
