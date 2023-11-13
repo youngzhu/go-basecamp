@@ -45,7 +45,7 @@ func AddScheduleEntry(projectName, scheduleName string, scheduleEntry ScheduleEn
 
 	entryJson, _ := json.Marshal(scheduleEntry)
 
-	url := parseUrl(UrlScheduleEntry, project.Id, schedule.Id)
+	url := parseUrl(urlScheduleEntry, project.Id, schedule.Id)
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
@@ -68,7 +68,7 @@ func CreateCard(projectName, cardTableName, columnName string, card Card) error 
 
 	entryJson, _ := json.Marshal(card)
 
-	url := parseUrl(UrlCard, project.Id, cardColumn.Id)
+	url := parseUrl(urlCard, project.Id, cardColumn.Id)
 	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err

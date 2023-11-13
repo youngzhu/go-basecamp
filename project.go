@@ -33,7 +33,7 @@ type dock struct {
 }
 
 func GetProjects() ([]Project, error) {
-	url := parseUrl(UrlProjects)
+	url := parseUrl(urlProjects)
 	jsonProjects, err := doRequest(url, http.MethodGet, nil)
 	if err != nil {
 		return nil, err
