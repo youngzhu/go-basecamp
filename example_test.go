@@ -27,3 +27,13 @@ func ExampleCreateCard() {
 	// Output:
 	//
 }
+
+func ExampleCreateTodo() {
+	basecamp.CreateTodo("MeTime", "To-dos", "券",
+		basecamp.Todo{
+			Content: "Buy mask",
+		})
+
+	// Output:
+	//
+}

@@ -86,6 +86,19 @@ func TestCreateCard(t *testing.T) {
 	}
 }
 
+func TestCreateTodo(t *testing.T) {
+	todo := Todo{
+		Content:     "test from API",
+		Description: "测试",
+		DueOn:       godate.Tomorrow().String(),
+		StartsOn:    godate.Today().String(),
+	}
+	err := CreateTodo("MeTime", "To-dos", "券", todo)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestParseUrl(t *testing.T) {
 	testcases := []struct {
 		url    string

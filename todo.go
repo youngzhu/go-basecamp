@@ -167,3 +167,10 @@ func (p *Project) getTodoListByTitle(todoSetTitle, todoListTitle string) TodoLis
 
 	return TodoList{}
 }
+
+type Todo struct {
+	Content     string `json:"content"`     // **Required parameters** for what the to-do is for
+	Description string `json:"description"` // containing information about the to-do
+	DueOn       string `json:"due_on"`      // a date when the to-do should be completed
+	StartsOn    string `json:"starts_on"`   // allows the to-do to run from this date to the `due_on` date
+}
