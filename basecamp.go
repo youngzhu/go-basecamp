@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/viper"
+	"github.com/youngzhu/oauth2-apps/basecamp"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -23,9 +25,14 @@ func init() {
 	viper.SetEnvPrefix("BASECAMP")
 	viper.AutomaticEnv() // read in environment variables that match
 
+	accessToken, refresh := basecamp.GetAccessToken()
+	if refresh {
+		log.Println("refresh token")
+	}
+
 	a = account{
 		accountID:   viper.GetString("ACCOUNT_ID"),
-		accessToken: viper.GetString("ACCESS_TOKEN"),
+		accessToken: accessToken,
 	}
 }
 

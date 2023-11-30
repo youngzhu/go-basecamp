@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/youngzhu/godate"
+	"github.com/youngzhu/oauth2-apps/basecamp"
 	"net/http"
 	"testing"
 	"time"
@@ -129,4 +130,11 @@ func TestDoRequest(t *testing.T) {
 		panic(err)
 	}
 	fmt.Printf("Responese: %s", jsonResp)
+}
+
+func TestGetAccessToken(t *testing.T) {
+	_, refresh := basecamp.GetAccessToken()
+	if refresh != true {
+		t.Error("should request a new access token by refresh")
+	}
 }

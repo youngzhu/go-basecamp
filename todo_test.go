@@ -50,15 +50,43 @@ func TestCreateTodo_xingye(t *testing.T) {
 		content := fmt.Sprintf("兴业银行100-25（%d月）", int(d.Month()))
 		dueOn := godate.MustDate(d.Year(), int(d.Month()), 25)
 		//fmt.Println(content, dueOn)
-		createCouponTodo(content, dueOn.String())
+		createCouponTodo(content, dueOn.String(), "")
 		d = d.AddDate(0, 1, 0)
 	}
 }
 
-func createCouponTodo(content, dueOn string) {
+func TestCreateTodo_guangda(t *testing.T) {
+	var content, dueOn string
+
+	//content = "光大银行30-15"
+	//dueOn = "2023-11-30"
+	content = "光大银行20-10"
+	dueOn = "2023-12-25"
+
+	for i := 0; i < 2; i++ {
+		createCouponTodo(content, dueOn, "")
+	}
+}
+
+func TestCreateTodo_pufa(t *testing.T) {
+	var content, dueOn, startsOn string
+
+	content = "浦发银行26-10"
+	//dueOn = "2023-11-30"
+	//
+	startsOn = "2023-12-27"
+	dueOn = "2024-01-31"
+
+	for i := 0; i < 4; i++ {
+		createCouponTodo(content, dueOn, startsOn)
+	}
+}
+
+func createCouponTodo(content, dueOn, startsOn string) {
 	todo := Todo{
-		Content: content,
-		DueOn:   dueOn,
+		Content:  content,
+		DueOn:    dueOn,
+		StartsOn: startsOn,
 	}
 	err := CreateTodo("MeTime", "To-dos", "券", todo)
 	if err != nil {
