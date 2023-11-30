@@ -2,7 +2,11 @@ module github.com/youngzhu/go-basecamp
 
 go 1.17
 
-require github.com/spf13/viper v1.15.0
+require (
+	github.com/spf13/viper v1.15.0
+	github.com/youngzhu/godate v0.5.1
+	github.com/youngzhu/oauth2-apps v0.0.0-20231130075909-b706106e3ec0
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
@@ -17,8 +21,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/youngzhu/go2chinese v0.0.0-20231016102312-b419cc4c7cb7 // indirect
-	github.com/youngzhu/godate v0.5.1 // indirect
-	github.com/youngzhu/oauth2-apps v0.0.0-20231130075909-b706106e3ec0 // indirect
 	golang.org/x/net v0.16.0 // indirect
 	golang.org/x/oauth2 v0.13.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
