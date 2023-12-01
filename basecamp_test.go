@@ -53,9 +53,11 @@ func TestAddScheduleEntry_allDay(t *testing.T) {
 
 func TestAddScheduleEntry(t *testing.T) {
 	scheduleEntry := ScheduleEntry{
-		Summary:  "Test",
-		StartsAt: time.Date(2023, 11, 5, 8, 0, 0, 0, time.Local),
-		EndsAt:   time.Date(2023, 11, 5, 10, 0, 0, 0, time.Local),
+		Summary: "Test",
+		//StartsAt: time.Date(2023, 11, 5, 8, 0, 0, 0, time.Local),
+		//EndsAt:   time.Date(2023, 11, 5, 10, 0, 0, 0, time.Local),
+		StartsAt: time.Now(),
+		EndsAt:   time.Now().Add(time.Minute * 30),
 	}
 
 	err := AddScheduleEntry("MeTime", "Schedule", scheduleEntry)
