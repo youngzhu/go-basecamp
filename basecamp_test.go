@@ -89,6 +89,17 @@ func TestCreateCard(t *testing.T) {
 	}
 }
 
+func TestCreateCard_simple(t *testing.T) {
+	card := Card{
+		Title: "Test Card",
+	}
+
+	err := CreateCard("Profession", "Card Table", "In progress", card)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCreateTodo(t *testing.T) {
 	todo := Todo{
 		Content:     "test from API",

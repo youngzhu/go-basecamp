@@ -75,8 +75,7 @@ func CreateCard(projectName, cardTableName, columnName string, card Card) error 
 
 	entryJson, _ := json.Marshal(card)
 
-	url := parseUrl(urlCard, project.Id, cardColumn.Id)
-	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
+	_, err = doRequest(cardColumn.CardsUrl, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
 }
