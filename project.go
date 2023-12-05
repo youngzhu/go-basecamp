@@ -32,6 +32,8 @@ type dock struct {
 	AppUrl   string `json:"app_url"`
 }
 
+const urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
+
 func GetProjects() ([]Project, error) {
 	url := parseUrl(urlProjects)
 	jsonProjects, err := doRequest(url, http.MethodGet, nil)

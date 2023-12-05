@@ -45,15 +45,14 @@ func AddScheduleEntry(projectName, scheduleName string, scheduleEntry ScheduleEn
 		return err
 	}
 
-	schedule := project.getDock(scheduleName)
+	schedule := project.getSchedule(scheduleName)
 	if schedule == nil {
 		return fmt.Errorf("%w: %s", ErrNotFoundSchedule, scheduleName)
 	}
 
 	entryJson, _ := json.Marshal(scheduleEntry)
 
-	url := parseUrl(urlScheduleEntry, project.Id, schedule.Id)
-	_, err = doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
+	_, err = doRequest(schedule.EntriesUrl, http.MethodPost, strings.NewReader(string(entryJson)))
 
 	return err
 }
