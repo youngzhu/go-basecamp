@@ -22,16 +22,6 @@ type Project struct {
 	Dock           []dock    `json:"dock"`
 }
 
-type dock struct {
-	Id       int    `json:"id"`
-	Title    string `json:"title"`
-	Name     string `json:"name"`
-	Enabled  bool   `json:"enabled"`
-	Position *int   `json:"position"`
-	Url      string `json:"url"`
-	AppUrl   string `json:"app_url"`
-}
-
 const urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
 
 func GetProjects() ([]Project, error) {

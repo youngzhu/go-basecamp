@@ -9,12 +9,12 @@ import (
 func TestProject_getTodoSet(t *testing.T) {
 	project, _ := GetProjectByName("MeTime")
 	todoSetTitle := "To-dos"
-	project.getTodoSet(todoSetTitle)
+	todoSet := project.getTodoSet(todoSetTitle)
 
-	//if cardColumn.Title != columnName {
-	//	t.Errorf("card column title not match, want: %s, but got: %s",
-	//		columnName, cardColumn.Title)
-	//}
+	if todoSet.Title != todoSetTitle {
+		t.Errorf("todoset title not match, want: %s, but got: %s",
+			todoSetTitle, todoSet.Title)
+	}
 }
 
 func TestProject_getTodoLists(t *testing.T) {
