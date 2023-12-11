@@ -48,8 +48,8 @@ func GetProjects() ([]Project, error) {
 	return _bc.GetProjects()
 }
 
-func GetProjectByName(name string) (*Project, error) {
-	projects, err := GetProjects()
+func (bc *BaseCamp) GetProjectByName(name string) (*Project, error) {
+	projects, err := bc.GetProjects()
 	if err != nil {
 		return nil, err
 	}
@@ -61,6 +61,10 @@ func GetProjectByName(name string) (*Project, error) {
 	}
 
 	return nil, fmt.Errorf("%w: %s", ErrNotFoundProject, name)
+}
+
+func GetProjectByName(name string) (*Project, error) {
+	return _bc.GetProjectByName(name)
 }
 
 func (p *Project) getDock(dockName string) *dock {
