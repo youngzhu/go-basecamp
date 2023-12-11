@@ -66,12 +66,3 @@ func (bc *BaseCamp) GetProjectByName(name string) (*Project, error) {
 func GetProjectByName(name string) (*Project, error) {
 	return _bc.GetProjectByName(name)
 }
-
-func (p *Project) getDock(dockName string) *dock {
-	for _, d := range p.Dock {
-		if dockName == d.Title {
-			return &d
-		}
-	}
-	return nil
-}

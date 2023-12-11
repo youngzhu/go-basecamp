@@ -58,7 +58,7 @@ type TodoSet struct {
 }
 
 func (p *Project) getTodoSet(todoSetTitle string) *TodoSet {
-	d := p.getDock(todoSetTitle)
+	d := p.getDock(TypeTodoSet, todoSetTitle)
 	if d == nil {
 		return nil
 	}

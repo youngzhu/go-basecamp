@@ -305,7 +305,7 @@ type Card struct {
 */
 
 func (p *Project) getCardColumn(cardTableName, cardColumnName string) *CardColumn {
-	d := p.getDock(cardTableName)
+	d := p.getDock(TypeCardTable, cardTableName)
 	if d == nil {
 		return nil
 	}

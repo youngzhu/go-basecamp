@@ -149,7 +149,7 @@ type Schedule struct {
 }
 
 func (p *Project) getSchedule(scheduleTitle string) *Schedule {
-	d := p.getDock(scheduleTitle)
+	d := p.getDock(TypeSchedule, scheduleTitle)
 	if d == nil {
 		return nil
 	}
