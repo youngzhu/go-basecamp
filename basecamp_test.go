@@ -11,10 +11,10 @@ import (
 )
 
 func TestAccount(t *testing.T) {
-	if a.accountID == "" {
+	if _bc.accountID == "" {
 		t.Error("account ID not set")
 	}
-	if a.accessToken == "" {
+	if _bc.accessToken == "" {
 		t.Error("access token not set")
 	}
 

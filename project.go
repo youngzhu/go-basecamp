@@ -22,21 +22,30 @@ type Project struct {
 	Dock           []dock    `json:"dock"`
 }
 
-const urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
+func (bc *BaseCamp) GetProjects() ([]Project, error) {
+	if bc.projects == nil {
+		const urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
+
+		bc.projectsUrl = parseUrl(urlProjects)
+		jsonProjects, err := bc.doRequest(bc.projectsUrl, http.MethodGet, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		var projects []Project
+		err = json.Unmarshal(jsonProjects, &projects)
+		if err != nil {
+			return nil, err
+		}
+
+		bc.projects = projects
+	}
+
+	return bc.projects, nil
+}
 
 func GetProjects() ([]Project, error) {
-	url := parseUrl(urlProjects)
-	jsonProjects, err := doRequest(url, http.MethodGet, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	var projects []Project
-	err = json.Unmarshal(jsonProjects, &projects)
-	if err != nil {
-		return nil, err
-	}
-	return projects, nil
+	return _bc.GetProjects()
 }
 
 func GetProjectByName(name string) (*Project, error) {

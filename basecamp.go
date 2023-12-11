@@ -14,26 +14,36 @@ import (
 
 // API: https://github.com/basecamp/bc3-api
 
-var a account
-
-type account struct {
-	accountID   string // Basecamp account ID
-	accessToken string
-}
+var _bc *BaseCamp
 
 func init() {
 	viper.SetEnvPrefix("BASECAMP")
 	viper.AutomaticEnv() // read in environment variables that match
+
+	accountID := viper.GetString("ACCOUNT_ID")
 
 	accessToken, refresh := basecamp.GetAccessToken()
 	if refresh {
 		log.Println("refresh token")
 	}
 
-	a = account{
-		accountID:   viper.GetString("ACCOUNT_ID"),
-		accessToken: accessToken,
-	}
+	_bc = New(accountID, accessToken)
+}
+
+type BaseCamp struct {
+	accountID   string // Basecamp account ID
+	accessToken string
+
+	projectsUrl string
+	projects    []Project
+}
+
+func New(accountID, accessToken string) *BaseCamp {
+	bc := new(BaseCamp)
+	bc.accountID = accountID
+	bc.accessToken = accessToken
+
+	return bc
 }
 
 // AddScheduleEntry adds a schedule entry
@@ -98,7 +108,7 @@ func CreateTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) erro
 }
 
 func parseUrl(appUrl string, ids ...int) string {
-	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", a.accountID, 1)
+	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", _bc.accountID, 1)
 
 	u, err := url.Parse(appUrl)
 	if err != nil {
