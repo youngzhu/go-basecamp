@@ -2,13 +2,13 @@ package basecamp
 
 import "testing"
 
-func TestProject_getSchedule(t *testing.T) {
-	project, _ := GetProjectByName("MeTime")
+func TestGetDock_schedule(t *testing.T) {
 	scheduleTitle := "Schedule"
-	schedule := project.getSchedule(scheduleTitle)
+	d, _ := _bc.getDock("MeTime", TypeSchedule, scheduleTitle)
 
-	if scheduleTitle != schedule.Title {
+	scheduleDock := d.(*ScheduleDock)
+	if scheduleTitle != scheduleDock.Title {
 		t.Errorf("schedule title not match, want: %q, but got: %q",
-			scheduleTitle, schedule.Title)
+			scheduleTitle, scheduleDock.Title)
 	}
 }

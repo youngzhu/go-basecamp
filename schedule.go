@@ -3,6 +3,7 @@ package basecamp
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -101,7 +102,7 @@ type ScheduleEntry struct {
 
 */
 
-type Schedule struct {
+type ScheduleDock struct {
 	Id               int       `json:"id"`
 	Status           string    `json:"status"`
 	VisibleToClients bool      `json:"visible_to_clients"`
@@ -148,22 +149,35 @@ type Schedule struct {
 	EntriesUrl            string `json:"entries_url"`
 }
 
-func (p *Project) getSchedule(scheduleTitle string) *Schedule {
-	d := p.getDock(TypeSchedule, scheduleTitle)
-	if d == nil {
-		return nil
-	}
+func (d *ScheduleDock) DockType() dockType {
+	return TypeSchedule
+}
 
-	resp, err := doRequest(d.Url, http.MethodGet, nil)
+func (d *ScheduleDock) DockTitle() string {
+	return d.Title
+}
+
+// AddScheduleEntry adds a schedule entry
+// POST /buckets/1/schedules/3/entries.json
+// creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
+func (bc *BaseCamp) AddScheduleEntry(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {
+	scheduleDock, err := bc.GetScheduleDock(projectName, scheduleTitle)
 	if err != nil {
-		return nil
+		return err
 	}
 
-	var schedule *Schedule
-	err = json.Unmarshal(resp, &schedule)
+	entryJson, _ := json.Marshal(scheduleEntry)
+
+	_, err = bc.doRequest(scheduleDock.EntriesUrl, http.MethodPost, strings.NewReader(string(entryJson)))
+
+	return err
+}
+
+func (bc *BaseCamp) GetScheduleDock(projectName, scheduleTitle string) (*ScheduleDock, error) {
+	d, err := bc.getDock(projectName, TypeSchedule, scheduleTitle)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return schedule
+	return d.(*ScheduleDock), nil
 }

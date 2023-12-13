@@ -13,3 +13,23 @@ func TestType(t *testing.T) {
 		t.Errorf("want: %s, but got: %s", want, atype)
 	}
 }
+
+func TestBuildDockKey(t *testing.T) {
+	testcases := []struct {
+		projectName string
+		dt          dockType
+		dockTitle   string
+		want        string
+	}{
+		{"A Project", TypeSchedule, "a dock", "A Project##schedule##a dock"},
+	}
+
+	for _, tc := range testcases {
+		t.Run("", func(t *testing.T) {
+			got := buildDockKey(tc.projectName, tc.dt, tc.dockTitle)
+			if got != tc.want {
+				t.Errorf("want: %q, but got: %q", tc.want, got)
+			}
+		})
+	}
+}

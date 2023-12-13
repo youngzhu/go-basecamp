@@ -36,6 +36,8 @@ type BaseCamp struct {
 
 	projectsUrl string
 	projects    []Project
+
+	dockMap map[string]docker
 }
 
 func New(accountID, accessToken string) *BaseCamp {
@@ -43,28 +45,16 @@ func New(accountID, accessToken string) *BaseCamp {
 	bc.accountID = accountID
 	bc.accessToken = accessToken
 
+	bc.dockMap = make(map[string]docker)
+
 	return bc
 }
 
 // AddScheduleEntry adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
-func AddScheduleEntry(projectName, scheduleName string, scheduleEntry ScheduleEntry) error {
-	project, err := GetProjectByName(projectName)
-	if err != nil {
-		return err
-	}
-
-	schedule := project.getSchedule(scheduleName)
-	if schedule == nil {
-		return fmt.Errorf("%w: %s", ErrNotFoundSchedule, scheduleName)
-	}
-
-	entryJson, _ := json.Marshal(scheduleEntry)
-
-	_, err = doRequest(schedule.EntriesUrl, http.MethodPost, strings.NewReader(string(entryJson)))
-
-	return err
+func AddScheduleEntry(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {
+	return _bc.AddScheduleEntry(projectName, scheduleTitle, scheduleEntry)
 }
 
 // CreateCard creates a card
