@@ -53,7 +53,7 @@ func New(accountID, accessToken string) *BaseCamp {
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
 func AddSchedule(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {
-	return _bc.AddScheduleEntry(projectName, scheduleTitle, scheduleEntry)
+	return _bc.AddSchedule(projectName, scheduleTitle, scheduleEntry)
 }
 
 // AddCard creates a card
