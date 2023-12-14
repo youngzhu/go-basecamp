@@ -49,24 +49,24 @@ func New(accountID, accessToken string) *BaseCamp {
 	return bc
 }
 
-// AddScheduleEntry adds a schedule entry
+// AddSchedule adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
-func AddScheduleEntry(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {
+func AddSchedule(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {
 	return _bc.AddScheduleEntry(projectName, scheduleTitle, scheduleEntry)
 }
 
-// CreateCard creates a card
+// AddCard creates a card
 // POST /buckets/1/card_tables/lists/2/cards.json
 // creates a card within the column with ID 2 in the project with id 1.
-func CreateCard(projectName, cardTableTitle, columnTitle string, card Card) error {
+func AddCard(projectName, cardTableTitle, columnTitle string, card Card) error {
 	return _bc.CreateCard(projectName, cardTableTitle, columnTitle, card)
 }
 
-// CreateTodo creates a to-do
+// AddTodo creates a to-do
 // POST /buckets/1/todolists/3/todos.json
 // creates a to-do in the project with ID `1` and under the to-do list with an ID of `3`.
-func CreateTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) error {
+func AddTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) error {
 	project, err := GetProjectByName(projectName)
 	if err != nil {
 		return err

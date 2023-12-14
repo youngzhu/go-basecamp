@@ -313,7 +313,7 @@ type Card struct {
 
 */
 
-// CreateCard creates a card
+// AddCard creates a card
 // POST /buckets/1/card_tables/lists/2/cards.json
 // creates a card within the column with ID 2 in the project with id 1.
 func (bc *BaseCamp) CreateCard(projectName, cardTableTitle, columnTitle string, card Card) error {

@@ -23,7 +23,7 @@ func TestAccount(t *testing.T) {
 }
 
 func TestAddScheduleEntry_noProject(t *testing.T) {
-	err := AddScheduleEntry("nonproj", "", ScheduleEntry{})
+	err := AddSchedule("nonproj", "", ScheduleEntry{})
 	if !errors.Is(err, ErrNotFoundProject) {
 		t.Errorf("Expected error %q, got %q instead", ErrNotFoundProject, err)
 	}
@@ -31,7 +31,7 @@ func TestAddScheduleEntry_noProject(t *testing.T) {
 
 func TestAddScheduleEntry_noSchedule(t *testing.T) {
 	proj := getRandProject()
-	err := AddScheduleEntry(proj.Name, "", ScheduleEntry{})
+	err := AddSchedule(proj.Name, "", ScheduleEntry{})
 	if !errors.Is(err, ErrNotFoundSchedule) {
 		t.Errorf("Expected error %q, got %q instead", ErrNotFoundSchedule, err)
 	}
@@ -45,7 +45,7 @@ func TestAddScheduleEntry_allDay(t *testing.T) {
 		EndsAt:   time.Now(),
 	}
 
-	err := AddScheduleEntry("MeTime", "Schedule", scheduleEntry)
+	err := AddSchedule("MeTime", "Schedule", scheduleEntry)
 	if err != nil {
 		t.Error(err)
 	}
@@ -60,7 +60,7 @@ func TestAddScheduleEntry(t *testing.T) {
 		EndsAt:   time.Now().Add(time.Minute * 30),
 	}
 
-	err := AddScheduleEntry("MeTime", "Schedule", scheduleEntry)
+	err := AddSchedule("MeTime", "Schedule", scheduleEntry)
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,7 +83,7 @@ func TestCreateCard(t *testing.T) {
 		DueOn: friday.String(),
 	}
 
-	err := CreateCard("Profession", "Card Table", "In progress", card)
+	err := AddCard("Profession", "Card Table", "In progress", card)
 	if err != nil {
 		t.Error(err)
 	}
@@ -94,7 +94,7 @@ func TestCreateCard_simple(t *testing.T) {
 		Title: "Test Card",
 	}
 
-	err := CreateCard("Profession", "Card Table", "In progress", card)
+	err := AddCard("Profession", "Card Table", "In progress", card)
 	if err != nil {
 		t.Error(err)
 	}
@@ -107,7 +107,7 @@ func TestCreateTodo(t *testing.T) {
 		DueOn:       godate.Tomorrow().String(),
 		StartsOn:    godate.Today().String(),
 	}
-	err := CreateTodo("MeTime", "To-dos", "券", todo)
+	err := AddTodo("MeTime", "To-dos", "券", todo)
 	if err != nil {
 		t.Error(err)
 	}

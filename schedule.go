@@ -156,7 +156,7 @@ func (d *ScheduleDock) DockTitle() string {
 	return d.Title
 }
 
-// AddScheduleEntry adds a schedule entry
+// AddSchedule adds a schedule entry
 // POST /buckets/1/schedules/3/entries.json
 // creates a schedule entry in the project with ID 1 and under the schedule with an ID of 3.
 func (bc *BaseCamp) AddScheduleEntry(projectName, scheduleTitle string, scheduleEntry ScheduleEntry) error {

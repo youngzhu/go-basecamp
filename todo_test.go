@@ -88,7 +88,7 @@ func createCouponTodo(content, dueOn, startsOn string) {
 		DueOn:    dueOn,
 		StartsOn: startsOn,
 	}
-	err := CreateTodo("MeTime", "To-dos", "券", todo)
+	err := AddTodo("MeTime", "To-dos", "券", todo)
 	if err != nil {
 		panic(err)
 	}
