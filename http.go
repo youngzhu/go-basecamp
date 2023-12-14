@@ -3,7 +3,6 @@ package basecamp
 import (
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -17,7 +16,7 @@ func init() {
 }
 
 func (bc BaseCamp) doGet(url string) ([]byte, error) {
-	log.Println("get url:", url)
+	//log.Println("get url:", url)
 	return bc.doRequest(url, http.MethodGet, nil)
 }
 

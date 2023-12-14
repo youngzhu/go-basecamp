@@ -2,11 +2,12 @@ package basecamp
 
 import (
 	"encoding/json"
-	"net/http"
+	"fmt"
+	"strings"
 	"time"
 )
 
-type CardTable struct {
+type CardTableDock struct {
 	Id               int64     `json:"id"`
 	Status           string    `json:"status"`
 	VisibleToClients bool      `json:"visible_to_clients"`
@@ -75,7 +76,15 @@ type CardTable struct {
 		CanManageProjects bool `json:"can_manage_projects"`
 		CanManagePeople   bool `json:"can_manage_people"`
 	} `json:"subscribers"`
-	Lists []CardColumn `json:"lists"`
+	CardColumns []*CardColumn `json:"lists"`
+}
+
+func (d *CardTableDock) DockType() dockType {
+	return TypeCardTable
+}
+
+func (d *CardTableDock) DockTitle() string {
+	return d.Title
 }
 
 type CardColumn struct {
@@ -304,29 +313,43 @@ type Card struct {
 
 */
 
-func (p *Project) getCardColumn(cardTableName, cardColumnName string) *CardColumn {
-	d := p.getDock(TypeCardTable, cardTableName)
-	if d == nil {
-		return nil
-	}
-
-	// get card table
-	resp, err := doRequest(d.Url, http.MethodGet, nil)
+// CreateCard creates a card
+// POST /buckets/1/card_tables/lists/2/cards.json
+// creates a card within the column with ID 2 in the project with id 1.
+func (bc *BaseCamp) CreateCard(projectName, cardTableTitle, columnTitle string, card Card) error {
+	cardTableDock, err := bc.GetCardTableDock(projectName, cardTableTitle)
 	if err != nil {
-		return nil
+		return err
 	}
 
-	var cardTable *CardTable
-	err = json.Unmarshal(resp, &cardTable)
+	cardColumn := cardTableDock.getCardColumn(columnTitle)
+	if cardColumn == nil {
+		return fmt.Errorf("%w: card table: %q, card column: %q",
+			ErrNotFoundCardColumn, cardTableTitle, columnTitle)
+	}
+
+	entryJson, _ := json.Marshal(card)
+
+	_, err = bc.doPost(cardColumn.CardsUrl, strings.NewReader(string(entryJson)))
+
+	return err
+}
+
+func (bc *BaseCamp) GetCardTableDock(projectName, cardTableTitle string) (*CardTableDock, error) {
+	d, err := bc.getDock(projectName, TypeCardTable, cardTableTitle)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	// find the card column
-	for _, c := range cardTable.Lists {
-		if cardColumnName == c.Title {
-			return &c
+	return d.(*CardTableDock), nil
+}
+
+func (d *CardTableDock) getCardColumn(cardColumnTitle string) *CardColumn {
+	for _, c := range d.CardColumns {
+		if cardColumnTitle == c.Title {
+			return c
 		}
 	}
+
 	return nil
 }

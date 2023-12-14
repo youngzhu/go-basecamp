@@ -2,7 +2,6 @@ package basecamp
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/spf13/viper"
 	"github.com/youngzhu/oauth2-apps/basecamp"
 	"log"
@@ -60,23 +59,8 @@ func AddScheduleEntry(projectName, scheduleTitle string, scheduleEntry ScheduleE
 // CreateCard creates a card
 // POST /buckets/1/card_tables/lists/2/cards.json
 // creates a card within the column with ID 2 in the project with id 1.
-func CreateCard(projectName, cardTableName, columnName string, card Card) error {
-	project, err := GetProjectByName(projectName)
-	if err != nil {
-		return err
-	}
-
-	cardColumn := project.getCardColumn(cardTableName, columnName)
-	if cardColumn == nil {
-		return fmt.Errorf("%w: card table: %q, card column: %q",
-			ErrNotFoundCardColumn, cardTableName, columnName)
-	}
-
-	entryJson, _ := json.Marshal(card)
-
-	_, err = doRequest(cardColumn.CardsUrl, http.MethodPost, strings.NewReader(string(entryJson)))
-
-	return err
+func CreateCard(projectName, cardTableTitle, columnTitle string, card Card) error {
+	return _bc.CreateCard(projectName, cardTableTitle, columnTitle, card)
 }
 
 // CreateTodo creates a to-do

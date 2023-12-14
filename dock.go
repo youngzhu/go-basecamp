@@ -75,6 +75,13 @@ func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (
 			return nil, err
 		}
 		d = schedule
+	case TypeCardTable:
+		var cardTable *CardTableDock
+		err = json.Unmarshal(resp, &cardTable)
+		if err != nil {
+			return nil, err
+		}
+		d = cardTable
 	default:
 		return nil, ErrNotSupport
 	}
