@@ -33,3 +33,15 @@ func TestBuildDockKey(t *testing.T) {
 		})
 	}
 }
+
+func TestGetDock_twice(t *testing.T) {
+	scheduleTitle := "Schedule"
+	projectName := "MeTime"
+
+	// 1st request
+	_bc.getDock(projectName, TypeSchedule, scheduleTitle)
+
+	// 2nd request
+	_bc.getDock(projectName, TypeSchedule, scheduleTitle)
+
+}

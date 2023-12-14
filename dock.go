@@ -3,7 +3,6 @@ package basecamp
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 )
 
 type dockType string
@@ -61,7 +60,7 @@ func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (
 		return nil, fmt.Errorf("%w: type: %s, title: %q", ErrNotFoundDock, dt, dockTitle)
 	}
 
-	resp, err := bc.doRequest(dockUrl, http.MethodGet, nil)
+	resp, err := bc.doGet(dockUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +78,9 @@ func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (
 	default:
 		return nil, ErrNotSupport
 	}
+
+	// cached
+	bc.dockMap[key] = d
 
 	return d, nil
 }

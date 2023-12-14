@@ -3,6 +3,7 @@ package basecamp
 import (
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -13,6 +14,15 @@ func init() {
 	httpClient = &http.Client{
 		Timeout: 30 * time.Second,
 	}
+}
+
+func (bc BaseCamp) doGet(url string) ([]byte, error) {
+	log.Println("get url:", url)
+	return bc.doRequest(url, http.MethodGet, nil)
+}
+
+func (bc BaseCamp) doPost(url string, body io.Reader) ([]byte, error) {
+	return bc.doRequest(url, http.MethodPost, body)
 }
 
 func (bc BaseCamp) doRequest(url, method string, body io.Reader) ([]byte, error) {
