@@ -56,6 +56,7 @@ func (bc BaseCamp) doRequest(url, method string, body io.Reader) ([]byte, error)
 	return respBody, nil
 }
 
+// todo remove
 func doRequest(url, method string, body io.Reader) ([]byte, error) {
 	request, err := http.NewRequest(method, url, body)
 	if err != nil {

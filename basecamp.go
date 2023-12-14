@@ -1,11 +1,9 @@
 package basecamp
 
 import (
-	"encoding/json"
 	"github.com/spf13/viper"
 	"github.com/youngzhu/oauth2-apps/basecamp"
 	"log"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -67,18 +65,7 @@ func AddCard(projectName, cardTableTitle, columnTitle string, card Card) error {
 // POST /buckets/1/todolists/3/todos.json
 // creates a to-do in the project with ID `1` and under the to-do list with an ID of `3`.
 func AddTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) error {
-	project, err := GetProjectByName(projectName)
-	if err != nil {
-		return err
-	}
-
-	entryJson, _ := json.Marshal(todo)
-
-	todoList := project.getTodoListByTitle(todoSetTitle, todoListTitle)
-	//fmt.Printf("todo list's title: %s, id: %d\n", todoList.Title, todoList.Id)
-	_, err = doRequest(todoList.TodosUrl, http.MethodPost, strings.NewReader(string(entryJson)))
-
-	return nil
+	return _bc.AddTodo(projectName, todoSetTitle, todoListTitle, todo)
 }
 
 func parseUrl(appUrl string, ids ...int) string {

@@ -2,12 +2,14 @@ package basecamp
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
-// TodoSet all to-do lists under a project are children of a to-do set resource
-type TodoSet struct {
+// TodoSetDock all to-do lists under a project are children of a to-do set resource
+type TodoSetDock struct {
 	Id               int       `json:"id"`
 	Status           string    `json:"status"`
 	VisibleToClients bool      `json:"visible_to_clients"`
@@ -57,7 +59,15 @@ type TodoSet struct {
 	AppTodoslistsUrl string `json:"app_todoslists_url"`
 }
 
-func (p *Project) getTodoSet(todoSetTitle string) *TodoSet {
+func (d *TodoSetDock) DockType() dockType {
+	return TypeTodoSet
+}
+
+func (d *TodoSetDock) DockTitle() string {
+	return d.Title
+}
+
+func (p *Project) getTodoSet(todoSetTitle string) *TodoSetDock {
 	d := p.getDock(TypeTodoSet, todoSetTitle)
 	if d == nil {
 		return nil
@@ -68,7 +78,7 @@ func (p *Project) getTodoSet(todoSetTitle string) *TodoSet {
 		return nil
 	}
 
-	var todoSet *TodoSet
+	var todoSet *TodoSetDock
 	err = json.Unmarshal(resp, &todoSet)
 	if err != nil {
 		return nil
@@ -139,6 +149,7 @@ type TodoList struct {
 	AppTodosUrl    string `json:"app_todos_url"`
 }
 
+// todo remove
 func (p *Project) getTodoLists(todoSetTitle string) []TodoList {
 	todoSet := p.getTodoSet(todoSetTitle)
 
@@ -156,21 +167,82 @@ func (p *Project) getTodoLists(todoSetTitle string) []TodoList {
 	return todoLists
 }
 
-func (p *Project) getTodoListByTitle(todoSetTitle, todoListTitle string) TodoList {
-	todoLists := p.getTodoLists(todoSetTitle)
-
-	for _, list := range todoLists {
-		if todoListTitle == list.Title {
-			return list
-		}
-	}
-
-	return TodoList{}
-}
-
 type Todo struct {
 	Content     string `json:"content"`     // **Required parameters** for what the to-do is for
 	Description string `json:"description"` // containing information about the to-do
 	DueOn       string `json:"due_on"`      // a date when the to-do should be completed
 	StartsOn    string `json:"starts_on"`   // allows the to-do to run from this date to the `due_on` date
+}
+
+// AddTodo creates a to-do
+// POST /buckets/1/todolists/3/todos.json
+// creates a to-do in the project with ID `1` and under the to-do list with an ID of `3`.
+func (bc *BaseCamp) AddTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) error {
+	todoLists, err := bc.getTodoLists(projectName, todoSetTitle)
+	if err != nil {
+		return err
+	}
+
+	var todoList TodoList
+	for _, list := range todoLists {
+		if todoListTitle == list.Title {
+			todoList = list
+		}
+	}
+
+	entryJson, _ := json.Marshal(todo)
+
+	_, err = doRequest(todoList.TodosUrl, http.MethodPost, strings.NewReader(string(entryJson)))
+
+	return nil
+}
+
+//func (bc *BaseCamp) GetTodoSetDock(projectName, todoSetTitle string) (*TodoSetDock, error) {
+//	d, err := bc.getDock(projectName, TypeTodoSet, todoSetTitle)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	return d.(*TodoSetDock), nil
+//}
+
+func (bc *BaseCamp) getTodoListByTitle(projectName, todoSetTitle, todoListTitle string) (TodoList, error) {
+	todoList := TodoList{}
+
+	todoLists, err := bc.getTodoLists(projectName, todoSetTitle)
+	if err != nil {
+		return todoList, err
+	}
+
+	for _, list := range todoLists {
+		if todoListTitle == list.Title {
+			return list, nil
+		}
+	}
+
+	return todoList, fmt.Errorf("%w: %s", ErrNotFoundTodoList, todoListTitle)
+}
+
+func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, error) {
+	// todo map cache
+
+	d, err := bc.getDock(projectName, TypeTodoSet, todoSetTitle)
+	if err != nil {
+		return nil, err
+	}
+
+	todoSet := d.(*TodoSetDock)
+
+	resp, err := bc.doGet(todoSet.TodolistsUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	var todoLists []TodoList
+	err = json.Unmarshal(resp, &todoLists)
+	if err != nil {
+		return nil, err
+	}
+
+	return todoLists, nil
 }

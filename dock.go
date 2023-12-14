@@ -82,6 +82,13 @@ func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (
 			return nil, err
 		}
 		d = cardTable
+	case TypeTodoSet:
+		var todoSet *TodoSetDock
+		err = json.Unmarshal(resp, &todoSet)
+		if err != nil {
+			return nil, err
+		}
+		d = todoSet
 	default:
 		return nil, ErrNotSupport
 	}

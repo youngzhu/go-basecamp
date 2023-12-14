@@ -29,11 +29,13 @@ func TestProject_getTodoLists(t *testing.T) {
 	}
 }
 
-func TestProject_getTodoListByTitle(t *testing.T) {
-	project, _ := GetProjectByName("MeTime")
-	todoSetTitle := "To-dos"
+func TestBaseCamp_getTodoListByTitle(t *testing.T) {
 	todoListTitle := "券"
-	todoList := project.getTodoListByTitle(todoSetTitle, todoListTitle)
+	todoList, err := _bc.getTodoListByTitle("MeTime", "To-dos", todoListTitle)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if todoListTitle != todoList.Title {
 		t.Errorf("todo list title not match, want: %q, but got: %q",
