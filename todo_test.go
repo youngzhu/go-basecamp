@@ -17,11 +17,22 @@ func TestProject_getTodoSet(t *testing.T) {
 	}
 }
 
-func TestProject_getTodoLists(t *testing.T) {
-	project, _ := GetProjectByName("MeTime")
+func TestBaseCamp_getTodoLists(t *testing.T) {
+	projectName := "MeTime"
 	todoSetTitle := "To-dos"
-	todoSet := project.getTodoSet(todoSetTitle)
-	todoLists := project.getTodoLists(todoSetTitle)
+
+	todoSet, err := _bc.getTodoSetDock(projectName, todoSetTitle)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// cache test
+	_bc.getTodoLists(projectName, todoSetTitle)
+	todoLists, err := _bc.getTodoLists(projectName, todoSetTitle)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if todoSet.TodolistsCount != len(todoLists) {
 		t.Errorf("count of todo list, want: %d, but got: %d",

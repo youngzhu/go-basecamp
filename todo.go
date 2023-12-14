@@ -197,14 +197,14 @@ func (bc *BaseCamp) AddTodo(projectName, todoSetTitle, todoListTitle string, tod
 	return nil
 }
 
-//func (bc *BaseCamp) GetTodoSetDock(projectName, todoSetTitle string) (*TodoSetDock, error) {
-//	d, err := bc.getDock(projectName, TypeTodoSet, todoSetTitle)
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return d.(*TodoSetDock), nil
-//}
+func (bc *BaseCamp) getTodoSetDock(projectName, todoSetTitle string) (*TodoSetDock, error) {
+	d, err := bc.getDock(projectName, TypeTodoSet, todoSetTitle)
+	if err != nil {
+		return nil, err
+	}
+
+	return d.(*TodoSetDock), nil
+}
 
 func (bc *BaseCamp) getTodoListByTitle(projectName, todoSetTitle, todoListTitle string) (TodoList, error) {
 	todoList := TodoList{}
@@ -226,12 +226,10 @@ func (bc *BaseCamp) getTodoListByTitle(projectName, todoSetTitle, todoListTitle 
 func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, error) {
 	// todo map cache
 
-	d, err := bc.getDock(projectName, TypeTodoSet, todoSetTitle)
+	todoSet, err := bc.getTodoSetDock(projectName, todoSetTitle)
 	if err != nil {
 		return nil, err
 	}
-
-	todoSet := d.(*TodoSetDock)
 
 	resp, err := bc.doGet(todoSet.TodolistsUrl)
 	if err != nil {
