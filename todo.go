@@ -3,7 +3,6 @@ package basecamp
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strings"
 	"time"
 )
@@ -65,26 +64,6 @@ func (d *TodoSetDock) DockType() dockType {
 
 func (d *TodoSetDock) DockTitle() string {
 	return d.Title
-}
-
-func (p *Project) getTodoSet(todoSetTitle string) *TodoSetDock {
-	d := p.getDock(TypeTodoSet, todoSetTitle)
-	if d == nil {
-		return nil
-	}
-
-	resp, err := doRequest(d.Url, http.MethodGet, nil)
-	if err != nil {
-		return nil
-	}
-
-	var todoSet *TodoSetDock
-	err = json.Unmarshal(resp, &todoSet)
-	if err != nil {
-		return nil
-	}
-
-	return todoSet
 }
 
 type TodoList struct {
@@ -149,24 +128,6 @@ type TodoList struct {
 	AppTodosUrl    string `json:"app_todos_url"`
 }
 
-// todo remove
-func (p *Project) getTodoLists(todoSetTitle string) []TodoList {
-	todoSet := p.getTodoSet(todoSetTitle)
-
-	resp, err := doRequest(todoSet.TodolistsUrl, http.MethodGet, nil)
-	if err != nil {
-		return nil
-	}
-
-	var todoLists []TodoList
-	err = json.Unmarshal(resp, &todoLists)
-	if err != nil {
-		return nil
-	}
-
-	return todoLists
-}
-
 type Todo struct {
 	Content     string `json:"content"`     // **Required parameters** for what the to-do is for
 	Description string `json:"description"` // containing information about the to-do
@@ -192,7 +153,7 @@ func (bc *BaseCamp) AddTodo(projectName, todoSetTitle, todoListTitle string, tod
 
 	entryJson, _ := json.Marshal(todo)
 
-	_, err = doRequest(todoList.TodosUrl, http.MethodPost, strings.NewReader(string(entryJson)))
+	_, err = bc.doPost(todoList.TodosUrl, strings.NewReader(string(entryJson)))
 
 	return nil
 }

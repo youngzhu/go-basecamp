@@ -6,10 +6,12 @@ import (
 	"testing"
 )
 
-func TestProject_getTodoSet(t *testing.T) {
-	project, _ := GetProjectByName("MeTime")
+func TestBaseCamp_getTodoSet(t *testing.T) {
 	todoSetTitle := "To-dos"
-	todoSet := project.getTodoSet(todoSetTitle)
+	todoSet, err := _bc.getTodoSetDock("MeTime", todoSetTitle)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if todoSet.Title != todoSetTitle {
 		t.Errorf("todoset title not match, want: %s, but got: %s",

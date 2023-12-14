@@ -2,10 +2,8 @@ package basecamp
 
 import (
 	"errors"
-	"fmt"
 	"github.com/youngzhu/godate"
 	"github.com/youngzhu/oauth2-apps/basecamp"
-	"net/http"
 	"testing"
 	"time"
 )
@@ -73,7 +71,7 @@ func TestAddScheduleEntry(t *testing.T) {
 //	}
 //}
 
-func TestCreateCard(t *testing.T) {
+func TestAddCard(t *testing.T) {
 	today := godate.Today()
 	workdays := today.Workdays()
 	monday := workdays[0]
@@ -89,7 +87,7 @@ func TestCreateCard(t *testing.T) {
 	}
 }
 
-func TestCreateCard_simple(t *testing.T) {
+func TestAddCard_simple(t *testing.T) {
 	card := Card{
 		Title: "Test Card",
 	}
@@ -100,14 +98,14 @@ func TestCreateCard_simple(t *testing.T) {
 	}
 }
 
-func TestCreateTodo(t *testing.T) {
+func TestAddTodo(t *testing.T) {
 	todo := Todo{
 		Content:     "test from API",
 		Description: "测试",
 		DueOn:       godate.Tomorrow().String(),
 		StartsOn:    godate.Today().String(),
 	}
-	err := AddTodo("MeTime", "To-dos", "券", todo)
+	err := AddTodo("MeTime", "To-dos", "Inbox", todo)
 	if err != nil {
 		t.Error(err)
 	}
@@ -134,15 +132,6 @@ func TestParseUrl(t *testing.T) {
 		})
 	}
 
-}
-
-func TestDoRequest(t *testing.T) {
-	url := "https://3.basecampapi.com/5161745/buckets/28933112/card_tables/5878088123.json"
-	jsonResp, err := doRequest(url, http.MethodGet, nil)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Responese: %s", jsonResp)
 }
 
 func TestGetAccessToken(t *testing.T) {

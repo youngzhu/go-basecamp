@@ -103,13 +103,3 @@ func buildDockKey(projectName string, dt dockType, dockTitle string) string {
 	const split = "##"
 	return projectName + split + string(dt) + split + dockTitle
 }
-
-// todo remove
-func (p *Project) getDock(dt dockType, dockTitle string) *dock {
-	for _, d := range p.Dock {
-		if dt == d.Name && dockTitle == d.Title {
-			return &d
-		}
-	}
-	return nil
-}
