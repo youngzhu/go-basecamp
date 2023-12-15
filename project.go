@@ -3,7 +3,6 @@ package basecamp
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 )
 
@@ -27,7 +26,7 @@ func (bc *BaseCamp) GetProjects() ([]Project, error) {
 		const urlProjects = "https://3.basecampapi.com/$ACCOUNT_ID/projects.json"
 
 		bc.projectsUrl = parseUrl(urlProjects)
-		jsonProjects, err := bc.doRequest(bc.projectsUrl, http.MethodGet, nil)
+		jsonProjects, err := bc.doGet(bc.projectsUrl)
 		if err != nil {
 			return nil, err
 		}
