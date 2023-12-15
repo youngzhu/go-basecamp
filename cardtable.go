@@ -1,9 +1,7 @@
 package basecamp
 
 import (
-	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -328,9 +326,7 @@ func (bc *BaseCamp) CreateCard(projectName, cardTableTitle, columnTitle string, 
 			ErrNotFoundCardColumn, cardTableTitle, columnTitle)
 	}
 
-	entryJson, _ := json.Marshal(card)
-
-	_, err = bc.doPost(cardColumn.CardsUrl, strings.NewReader(string(entryJson)))
+	_, err = bc.doPost(cardColumn.CardsUrl, card)
 
 	return err
 }

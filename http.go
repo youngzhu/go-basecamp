@@ -1,10 +1,12 @@
 package basecamp
 
 import (
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,9 +23,17 @@ func (bc BaseCamp) doGet(url string) ([]byte, error) {
 	return bc.doRequest(url, http.MethodGet, nil)
 }
 
-func (bc BaseCamp) doPost(url string, body io.Reader) ([]byte, error) {
-	return bc.doRequest(url, http.MethodPost, body)
+func (bc BaseCamp) doPost(url string, entry interface{}) ([]byte, error) {
+	entryJson, err := json.Marshal(entry)
+	if err != nil {
+		return nil, err
+	}
+	return bc.doRequest(url, http.MethodPost, strings.NewReader(string(entryJson)))
 }
+
+//type postEntry interface {
+//	Body() io.Reader
+//}
 
 func (bc BaseCamp) doRequest(url, method string, body io.Reader) ([]byte, error) {
 	request, err := http.NewRequest(method, url, body)

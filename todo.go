@@ -3,7 +3,6 @@ package basecamp
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -151,9 +150,7 @@ func (bc *BaseCamp) AddTodo(projectName, todoSetTitle, todoListTitle string, tod
 		}
 	}
 
-	entryJson, _ := json.Marshal(todo)
-
-	_, err = bc.doPost(todoList.TodosUrl, strings.NewReader(string(entryJson)))
+	_, err = bc.doPost(todoList.TodosUrl, todo)
 
 	return nil
 }

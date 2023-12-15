@@ -1,8 +1,6 @@
 package basecamp
 
 import (
-	"encoding/json"
-	"strings"
 	"time"
 )
 
@@ -165,9 +163,7 @@ func (bc *BaseCamp) AddSchedule(projectName, scheduleTitle string, scheduleEntry
 		return err
 	}
 
-	entryJson, _ := json.Marshal(scheduleEntry)
-
-	_, err = bc.doPost(scheduleDock.EntriesUrl, strings.NewReader(string(entryJson)))
+	_, err = bc.doPost(scheduleDock.EntriesUrl, scheduleEntry)
 
 	return err
 }
