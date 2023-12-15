@@ -186,6 +186,10 @@ func (bc *BaseCamp) getTodoListByTitle(projectName, todoSetTitle, todoListTitle 
 
 func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, error) {
 	// todo map cache
+	key := buildTodoListsKey(projectName, todoSetTitle)
+	if v, ok := bc.todoListsMap[key]; ok {
+		return v, nil
+	}
 
 	todoSet, err := bc.getTodoSetDock(projectName, todoSetTitle)
 	if err != nil {
@@ -203,5 +207,12 @@ func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, 
 		return nil, err
 	}
 
+	// cached
+	bc.todoListsMap[key] = todoLists
+
 	return todoLists, nil
+}
+
+func buildTodoListsKey(projectName, todoSetTitle string) string {
+	return projectName + keySplit + todoSetTitle
 }

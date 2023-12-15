@@ -31,10 +31,13 @@ type BaseCamp struct {
 	accountID   string // Basecamp account ID
 	accessToken string
 
+	// cached info
 	projectsUrl string
 	projects    []Project
 
 	dockMap map[string]docker
+
+	todoListsMap map[string][]TodoList
 }
 
 func New(accountID, accessToken string) *BaseCamp {
@@ -43,6 +46,7 @@ func New(accountID, accessToken string) *BaseCamp {
 	bc.accessToken = accessToken
 
 	bc.dockMap = make(map[string]docker)
+	bc.todoListsMap = make(map[string][]TodoList)
 
 	return bc
 }
@@ -89,3 +93,5 @@ func parseUrl(appUrl string, ids ...int) string {
 
 	return u.String()
 }
+
+const keySplit = "##"

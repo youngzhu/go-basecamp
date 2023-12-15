@@ -34,10 +34,10 @@ type docker interface {
 	DockTitle() string
 }
 
-func (bc *BaseCamp) putDock(projectName string, adock docker) {
-	key := buildDockKey(projectName, adock.DockType(), adock.DockTitle())
-	bc.dockMap[key] = adock
-}
+//func (bc *BaseCamp) putDock(projectName string, adock docker) {
+//	key := buildDockKey(projectName, adock.DockType(), adock.DockTitle())
+//	bc.dockMap[key] = adock
+//}
 
 func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (docker, error) {
 	key := buildDockKey(projectName, dt, dockTitle)
@@ -100,6 +100,5 @@ func (bc *BaseCamp) getDock(projectName string, dt dockType, dockTitle string) (
 }
 
 func buildDockKey(projectName string, dt dockType, dockTitle string) string {
-	const split = "##"
-	return projectName + split + string(dt) + split + dockTitle
+	return projectName + keySplit + string(dt) + keySplit + dockTitle
 }
