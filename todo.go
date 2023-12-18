@@ -182,7 +182,6 @@ func (bc *BaseCamp) getTodoListByTitle(projectName, todoSetTitle, todoListTitle 
 }
 
 func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, error) {
-	// todo map cache
 	key := buildTodoListsKey(projectName, todoSetTitle)
 	if v, ok := bc.todoListsMap[key]; ok {
 		return v, nil
