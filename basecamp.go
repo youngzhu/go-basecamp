@@ -72,6 +72,17 @@ func AddTodo(projectName, todoSetTitle, todoListTitle string, todo Todo) error {
 	return _bc.AddTodo(projectName, todoSetTitle, todoListTitle, todo)
 }
 
+// AddTodoList Create a to-do list
+// POST /buckets/1/todosets/3/todolists.json
+// creates a to-do list in the project with ID `1` and under the to-do set with an ID of `3`.
+func AddTodoList(projectName, todoSetTitle, todoListName string) error {
+	return _bc.AddTodoList(projectName, todoSetTitle, todoListName)
+}
+
+func AddTodoListAndTodos(projectName, todoSetTitle, todoListAndTodos string) error {
+	return _bc.AddTodoList(projectName, todoSetTitle, todoListAndTodos)
+}
+
 func parseUrl(appUrl string, ids ...int) string {
 	appUrl = strings.Replace(appUrl, "$ACCOUNT_ID", _bc.accountID, 1)
 

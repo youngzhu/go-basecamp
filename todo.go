@@ -152,7 +152,23 @@ func (bc *BaseCamp) AddTodo(projectName, todoSetTitle, todoListTitle string, tod
 
 	_, err = bc.doPost(todoList.TodosUrl, todo)
 
-	return nil
+	return err
+}
+
+// AddTodoList Create a to-do list
+// POST /buckets/1/todosets/3/todolists.json
+// creates a to-do list in the project with ID `1` and under the to-do set with an ID of `3`.
+func (bc *BaseCamp) AddTodoList(projectName, todoSetTitle, todoListName string) error {
+	todoSet, err := bc.getTodoSetDock(projectName, todoSetTitle)
+	if err != nil {
+		return err
+	}
+
+	todoList := TodoList{Name: todoListName}
+
+	_, err = bc.doPost(todoSet.TodolistsUrl, todoList)
+
+	return err
 }
 
 func (bc *BaseCamp) getTodoSetDock(projectName, todoSetTitle string) (*TodoSetDock, error) {
