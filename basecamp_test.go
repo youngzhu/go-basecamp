@@ -116,7 +116,7 @@ func TestAddTodoList(t *testing.T) {
 }
 
 func TestAddTodoListAndTodos(t *testing.T) {
-	AddTodoList("宝塔小学", "待办事项",
+	AddTodoListAndTodos("宝塔小学", "待办事项",
 		"数学作业：\n1、完成数学试卷一张；\n2、部分孩子订正数学补充习题第50--59页；\n3、读数学书第102--106页《期末复习》中的题目两遍")
 }
 

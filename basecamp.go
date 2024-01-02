@@ -80,7 +80,7 @@ func AddTodoList(projectName, todoSetTitle, todoListName string) error {
 }
 
 func AddTodoListAndTodos(projectName, todoSetTitle, todoListAndTodos string) error {
-	return _bc.AddTodoList(projectName, todoSetTitle, todoListAndTodos)
+	return _bc.AddTodoListAndTodos(projectName, todoSetTitle, todoListAndTodos)
 }
 
 func parseUrl(appUrl string, ids ...int) string {

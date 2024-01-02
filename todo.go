@@ -3,6 +3,7 @@ package basecamp
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -168,6 +169,23 @@ func (bc *BaseCamp) AddTodoList(projectName, todoSetTitle, todoListName string) 
 
 	_, err = bc.doPost(todoSet.TodolistsUrl, todoList)
 
+	return err
+}
+
+func (bc *BaseCamp) AddTodoListAndTodos(projectName, todoSetTitle, todoListAndTodos string) error {
+	arr := strings.Split(todoListAndTodos, "\n")
+	err := bc.AddTodoList(projectName, todoSetTitle, arr[0])
+	if err != nil {
+		return err
+	}
+
+	todos := arr[1:]
+	for _, todo := range todos {
+		err = bc.AddTodo(projectName, todoSetTitle, arr[0], Todo{Content: todo})
+		if err != nil {
+			return err
+		}
+	}
 	return err
 }
 
