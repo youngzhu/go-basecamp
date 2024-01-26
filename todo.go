@@ -174,14 +174,30 @@ func (bc *BaseCamp) AddTodoList(projectName, todoSetTitle, todoListName string) 
 
 func (bc *BaseCamp) AddTodoListAndTodos(projectName, todoSetTitle, todoListAndTodos string) error {
 	arr := strings.Split(todoListAndTodos, "\n")
-	err := bc.AddTodoList(projectName, todoSetTitle, arr[0])
+
+	// 处理首尾空行的问题
+	// 通过 `` 定义长字符串时会有这个问题
+	firstNonblankIdx := 0
+	for {
+		if arr[firstNonblankIdx] != "" {
+			break
+		}
+		firstNonblankIdx++
+	}
+
+	todoListTitle := arr[firstNonblankIdx]
+
+	err := bc.AddTodoList(projectName, todoSetTitle, todoListTitle)
 	if err != nil {
 		return err
 	}
 
-	todos := arr[1:]
+	todos := arr[firstNonblankIdx+1:]
 	for _, todo := range todos {
-		err = bc.AddTodo(projectName, todoSetTitle, arr[0], Todo{Content: todo})
+		if todo == "" {
+			break
+		}
+		err = bc.AddTodo(projectName, todoSetTitle, todoListTitle, Todo{Content: todo})
 		if err != nil {
 			return err
 		}
