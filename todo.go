@@ -129,10 +129,11 @@ type TodoList struct {
 }
 
 type Todo struct {
-	Content     string `json:"content"`     // **Required parameters** for what the to-do is for
-	Description string `json:"description"` // containing information about the to-do
-	DueOn       string `json:"due_on"`      // a date when the to-do should be completed
-	StartsOn    string `json:"starts_on"`   // allows the to-do to run from this date to the `due_on` date
+	Content     string  `json:"content"`      // **Required parameters** for what the to-do is for
+	Description string  `json:"description"`  // containing information about the to-do
+	DueOn       string  `json:"due_on"`       // a date when the to-do should be completed
+	StartsOn    string  `json:"starts_on"`    // allows the to-do to run from this date to the `due_on` date
+	AssigneeIds []int64 `json:"assignee_ids"` // an array of people that will be assigned to this to-do. Please see the Get people endpoints to retrieve them.
 }
 
 // AddTodo creates a to-do
@@ -261,4 +262,38 @@ func (bc *BaseCamp) getTodoLists(projectName, todoSetTitle string) ([]TodoList, 
 
 func buildTodoListsKey(projectName, todoSetTitle string) string {
 	return projectName + keySplit + todoSetTitle
+}
+
+func (bc *BaseCamp) getTodoByTitle(projectName, todoSetTitle, todoListTitle, todoTitle string) (Todo, error) {
+	todo := Todo{}
+
+	todos, err := bc.getTodos(projectName, todoSetTitle, todoListTitle)
+	if err != nil {
+		return todo, err
+	}
+
+	for _, todo := range todos {
+		if todoListTitle == todo.Content {
+			return todo, nil
+		}
+	}
+
+	return todo, fmt.Errorf("%w: %s", ErrNotFoundTodoList, todoListTitle)
+}
+
+func (bc *BaseCamp) getTodos(projectName, todoSetTitle, todoListTitle string) ([]Todo, error) {
+
+	todoList, err := bc.getTodoListByTitle(projectName, todoSetTitle, todoListTitle)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := bc.doGet(todoList.TodosUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	println(resp)
+
+	return nil, nil
 }
