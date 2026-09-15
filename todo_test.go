@@ -132,15 +132,32 @@ func TestCreateTodo_jianshe(t *testing.T) {
 func TestCreateTodo_jiaotong(t *testing.T) {
 	var content, dueOn string
 
-	content = "交通银行储蓄卡 微信 随机减"
-	dueOn = "2025-11-19"
+	content = "交行App 充值 -2"
+	dueOn = "2026-09-21"
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 1; i++ {
+		createCouponTodo(content, dueOn, "")
+	}
+}
+
+func TestCreateTodo_WeChat(t *testing.T) {
+	var content, dueOn string
+
+	content = "微信 ➡ 光大 150-1.8"
+	//content = "微信>建行 18-1.5"
+	dueOn = "2026-09-17"
+
+	for i := 0; i < 3; i++ {
 		createCouponTodo(content, dueOn, "")
 	}
 }
 
 func createCouponTodo(content, dueOn, startsOn string, assigneeIds ...int64) {
+
+	if assigneeIds == nil {
+		assigneeIds = []int64{36278984}
+	}
+
 	todo := Todo{
 		Content:     content,
 		DueOn:       dueOn,
