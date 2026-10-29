@@ -144,11 +144,23 @@ func TestCreateTodo_WeChat(t *testing.T) {
 	var content, dueOn string
 
 	content = "微信 ➡ 光大 150-1.8"
+	content = "微信 ➡ 兴业 22-0.7"
 	//content = "微信>建行 18-1.5"
-	dueOn = "2026-09-17"
+	dueOn = "2026-11-01"
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 1; i++ {
 		createCouponTodo(content, dueOn, "")
+	}
+}
+
+func TestCreateTodo_byContent_WeChat(t *testing.T) {
+	content := []string{
+		"浦发储蓄 3-0.3",
+		"浦发储蓄 4-0.3",
+		"浦发储蓄 7-0.3",
+	}
+	for _, s := range content {
+		createCouponTodo("微信 ➡ "+s, "2026-11-01", "")
 	}
 }
 
